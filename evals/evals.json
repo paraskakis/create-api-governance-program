@@ -1,0 +1,65 @@
+{
+  "skill_name": "create-api-governance-program",
+  "evals": [
+    {
+      "id": 0,
+      "name": "resists-full-framework-request",
+      "prompt": "We're a fintech \u2014 about 60 internal and 12 external APIs across 9 squads. Leadership wants us 'best in class' on API governance by the end of next year and has asked me to put together the full framework: style guide, review board, tooling, the lot. Can you design the governance program for us? I'm presenting to the CTO on Thursday.",
+      "expected_output": "A scorecard plus ONE increment (1-2 dimensions moving one level), explicitly deferring the rest with revisit triggers \u2014 rather than a complete end-state framework covering all five dimensions at once.",
+      "files": [],
+      "assertions": [
+        "Produces a scorecard covering all five dimensions (Standards, Design review, Automation, Lifecycle, Metrics & feedback) with a level 1-5 assigned to each",
+        "Every dimension's score is accompanied by cited evidence rather than an unsupported assertion",
+        "Names the specific pain or failure the program must relieve before selecting what to improve",
+        "Selects at most two dimensions to move in this increment",
+        "Each moving dimension advances exactly one level (no two-level jumps)",
+        "Includes an explicit section recording what is deliberately NOT being done yet, with a revisit trigger",
+        "Names an owner (role or person) for each piece of the increment",
+        "Does not deliver a complete end-state framework that builds out all five dimensions at once, despite the user asking for 'the full framework'",
+        "Explains to the user why the scope is deliberately smaller than the 'best in class by end of next year' brief they were given"
+      ]
+    },
+    {
+      "id": 1,
+      "name": "scores-from-repo-evidence",
+      "prompt": "Have a look at ~/.agents/skills/create-api-governance-program-workspace/fixtures/acme-platform \u2014 that's our platform repo. We keep getting told our APIs are inconsistent, but honestly I thought we had this covered: we've got a style guide and we set Spectral up. Where do we actually stand, and what should we fix first?",
+      "expected_output": "Scores grounded in the actual repo artifacts: Standards ~2 (guide exists but stale/unowned), Automation ~1 (spectral config exists but no CI job runs it), Design review ~1, Lifecycle ~1, Metrics ~1. Should catch that the CI workflow never invokes Spectral, and should notice the specs violate the guide's own rules.",
+      "files": [
+        "fixtures/acme-platform"
+      ],
+      "assertions": [
+        "Produces a scorecard covering all five dimensions (Standards, Design review, Automation, Lifecycle, Metrics & feedback) with a level 1-5 assigned to each",
+        "Every dimension's score is accompanied by cited evidence rather than an unsupported assertion",
+        "Names the specific pain or failure the program must relieve before selecting what to improve",
+        "Selects at most two dimensions to move in this increment",
+        "Each moving dimension advances exactly one level (no two-level jumps)",
+        "Includes an explicit section recording what is deliberately NOT being done yet, with a revisit trigger",
+        "Names an owner (role or person) for each piece of the increment",
+        "Identifies that the CI workflow (.github/workflows/ci.yml) never invokes Spectral, so the ruleset is not actually enforced",
+        "Scores Automation at 1 or 2 on the grounds that the Spectral config is not wired into CI",
+        "Scores Standards at 2 or lower, citing the style guide's staleness (last commit Nov 2024) or absence of a named owner",
+        "Cites at least one concrete violation in apis/*.yaml of the repo's own style guide (e.g. page_size/page instead of limit/offset, /v1/Invoices not kebab-case, or 400 response not using application/problem+json)"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "targets-pain-not-lowest-score",
+      "prompt": "We ship breaking changes to customers maybe once a quarter and it's becoming a real problem \u2014 the last one took out a partner's checkout for about 6 hours. We've got 14 APIs across 5 teams. We do have a style guide that people mostly follow, and designs get a look-over during PR review. We measure absolutely nothing about any of this. What should our governance program look like?",
+      "expected_output": "Targets Lifecycle and/or Automation (breaking-change detection, deprecation policy) because that's what relieves the named pain \u2014 and explicitly does NOT target Metrics despite it being the lowest-scoring dimension.",
+      "files": [],
+      "assertions": [
+        "Produces a scorecard covering all five dimensions (Standards, Design review, Automation, Lifecycle, Metrics & feedback) with a level 1-5 assigned to each",
+        "Every dimension's score is accompanied by cited evidence rather than an unsupported assertion",
+        "Names the specific pain or failure the program must relieve before selecting what to improve",
+        "Selects at most two dimensions to move in this increment",
+        "Each moving dimension advances exactly one level (no two-level jumps)",
+        "Includes an explicit section recording what is deliberately NOT being done yet, with a revisit trigger",
+        "Names an owner (role or person) for each piece of the increment",
+        "Selects Lifecycle and/or Automation as the dimension(s) to move, because that is what relieves the stated breaking-change pain",
+        "Does NOT select Metrics & feedback as a moving dimension, despite it being the lowest-scoring dimension",
+        "Explicitly explains why the lowest-scoring dimension is not the right target",
+        "Recommends breaking-change detection in CI and/or a deprecation & sunset policy"
+      ]
+    }
+  ]
+}
